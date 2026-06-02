@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Viva Sorte</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS via CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- UTMify Pixels -->
+  <script>
+    window.pixelId = "67e978ab4c1edd3fcaf907e2";
+    var a = document.createElement("script");
+    a.setAttribute("async",""); a.setAttribute("defer","");
+    a.setAttribute("src","https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+    document.head.appendChild(a);
+  </script>
+  <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-subids async defer></script>
+
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type="number"] { -moz-appearance: textfield; }
+
+    body { font-family: "Montserrat", sans-serif !important; margin: 0; }
+
+    /* ── HEADER ── */
+    .white-header {
+      display: flex; justify-content: space-between; align-items: center;
+      background-color: white; padding: 10px 20px; border-bottom: 1px solid #ddd;
+    }
+    .logoviva { width: 200px; }
+    .menu-button { background: none; border: none; font-size: 24px; cursor: pointer; color: #007BFF; }
+
+    /* ── LAYOUT ── */
+    .container-principal { margin: 0 auto; width: 950px; max-width: 100%; padding: 10px; }
+    .container-banner    { margin: 0 auto; width: 700px; max-width: 100%; padding: 10px; }
+
+    /* ── BANNER ── */
+    .carousel-item img { border-radius: 0.8rem !important; }
+    .tag-compre-agora { position: absolute; top: 0.8rem; right: 0.8rem; animation: pulse 2s infinite; }
+    .tag-compre-agora span {
+      color: white; font-size: .75rem; background-color: #52b52f;
+      border-radius: 0.2rem; padding: 0.4rem;
+      box-shadow: 0 0 10px 5px rgba(0,0,0,.16);
+    }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+
+    /* ── SORTEIO DATE ── */
+    .sorteio-date h1 { font-size: 1rem; font-weight: 600; }
+
+    /* ── COTAS ── */
+    .cotas {
+      margin-bottom: -20px; margin-top: -10px !important;
+      display: flex; justify-content: center; align-items: center;
+      flex-direction: column; padding: 0.9rem 0;
+    }
+    .cotas-one { margin-top: 1rem !important; width: 100%; display: flex; justify-content: center; align-items: center; }
+
+    button.cota {
+      margin: 0 0.3em; position: relative;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      width: 100%; color: white; background-color: #2f4eb5;
+      border: solid rgba(128,128,128,.137) 1px; padding: 0.5em 0;
+      border-radius: 0.3rem; box-shadow: 0 12px 16px -13px rgba(0,0,0,.47);
+      cursor: pointer; transition: background .2s;
+    }
+    button.cota:hover  { background-color: #52b52f; }
+    button.cota:focus  { background-color: #0f8400; outline: none; }
+    .cota-selected     { background-color: #0f8400 !important; }
+    .cota-qtd  { font-size: 2rem; font-weight: 700; }
+    .cota h1   { margin: 0 0 10px !important; font-size: .9rem; font-weight: 400; }
+    .cota h2   { margin-bottom: 5px !important; font-size: .9rem; font-weight: 400; }
+    i.destaque { background-color: #52b52f; position: absolute; top: 0; right: 0; padding: 0.2rem 0.5rem; border-radius: 0.6rem; }
+
+    /* ── CONTADOR ── */
+    .contador-cotas {
+      justify-content: center !important; margin-top: 30px !important;
+      display: flex; padding: 0.8rem 10rem;
+      background-color: #2f4eb5 !important; border-radius: 0.6rem;
+    }
+    button.btn-contador-cotas {
+      height: 45px; width: 45px; font-size: 1.8rem; color: white;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      background-color: transparent; border: solid white 2px;
+      padding: 0.5rem 1rem; border-radius: 50%; cursor: pointer;
+    }
+    input.input-contador-cotas {
+      text-align: center; margin: 0 1rem !important;
+      padding: 0.5rem 1.2rem; color: black; border: none; border-radius: 0.6rem;
+    }
+
+    /* ── BOTÃO COMPRAR ── */
+    button.adc-carrinho {
+      font-size: 1.2rem; font-weight: 600; color: white;
+      background-color: #52b52f; border: none; border-radius: 0.6rem;
+      width: 100%; padding: 0.8rem 0; margin-top: 10px !important; cursor: pointer;
+      transition: background .2s;
+    }
+    button.adc-carrinho:disabled { opacity: .6; cursor: not-allowed; }
+    button.adc-carrinho:hover:not(:disabled) { background-color: #0f8400; }
+    button.adc-carrinho i { font-size: 1.5rem; vertical-align: -0.1rem; }
+
+    /* ── CARDS HOSPITAL ── */
+    .hospital { margin-top: 20px; }
+    .card-hospital {
+      padding: 1.5em 2em; border-radius: 0.5em;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(180deg,rgba(245,158,11,1) 0%,rgba(191,36,26,1) 100%);
+    }
+    .card-hospital-image { width: 35%; display: flex; flex-direction: column; align-items: center; }
+    .card-hospital-image img { width: 150px; margin-bottom: 20px; }
+    .card-hospital-image h2 { font-weight: 600; color: white !important; font-size: 1em; }
+    .card-hospital-text { width: 60%; }
+    .card-hospital-text p { margin-top: 10px; font-size: .8em; color: white; text-align: justify; }
+    .card-hospital-bg-azul {
+      margin-top: 20px;
+      background: linear-gradient(180deg,rgba(14,165,233,1) 0%,rgba(37,99,235,1) 100%);
+    }
+
+    /* ── RODAPÉ ── */
+    .rodape { margin-top: 100px !important; padding: 1.5rem 0.5rem; background-color: #fafafa; }
+    IMG.logo-rodape { width: 250px; max-width: 40%; }
+    .redes { margin: 1.5rem 0 !important; }
+    .redes i { color: #2f4eb5; font-size: 1.2rem; margin-right: .5rem !important; }
+    .rodape h1 { font-size: .8rem; text-align: justify; }
+    .linha-rodape { margin: 2rem 0 !important; border-bottom: 4px solid #d1d5db; }
+    .patterns-rodape { display: flex; font-size: .7rem; font-weight: 500; }
+    .pattern-rodape { display: flex; flex-direction: column; margin-bottom: 30px; margin-right: 35px !important; }
+    .pattern-rodape img { width: 60%; height: auto; margin-top: 10px !important; }
+
+    /* ── MODAL PIX ── */
+    .pix-modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,.6);
+      align-items: center; justify-content: center;
+    }
+    .pix-modal-overlay.active { display: flex; }
+    .pix-modal-box {
+      background: #fff; border-radius: 16px;
+      width: 100%; max-width: 420px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 28px 24px 24px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      margin: 16px;
+    }
+    .pix-modal-close {
+      position: absolute; top: 12px; right: 16px;
+      background: none; border: none; font-size: 26px;
+      color: #666; cursor: pointer; line-height: 1;
+    }
+    .pix-modal-title {
+      font-size: 1.2rem; font-weight: 700;
+      color: #1e293b; margin-bottom: 6px; text-align: center;
+    }
+    .pix-modal-subtitle {
+      font-size: .85rem; color: #64748b;
+      text-align: center; margin-bottom: 20px;
+    }
+    .pix-modal-valor {
+      background: #eff6ff; border-radius: 10px;
+      padding: 10px 16px; text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.3rem; font-weight: 700; color: #2f4eb5;
+    }
+    .pix-form-group { margin-bottom: 14px; }
+    .pix-form-group label { display: block; font-size: .8rem; font-weight: 600; color: #374151; margin-bottom: 5px; }
+    .pix-form-group input {
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid #d1d5db; border-radius: 10px;
+      font-size: .95rem; font-family: inherit; outline: none;
+      transition: border-color .2s;
+    }
+    .pix-form-group input:focus { border-color: #2f4eb5; }
+    .pix-btn-gerar {
+      width: 100%; padding: 14px;
+      background: #52b52f; color: white;
+      border: none; border-radius: 10px;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer; margin-top: 6px;
+      transition: background .2s;
+    }
+    .pix-btn-gerar:hover { background: #0f8400; }
+    .pix-btn-gerar:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* ── TELA QR CODE ── */
+    .pix-qr-screen { display: none; text-align: center; }
+    .pix-qr-screen.active { display: block; }
+    .pix-form-screen { display: block; }
+    .pix-form-screen.hidden { display: none; }
+
+    .pix-loader {
+      display: none; text-align: center; padding: 30px 0;
+    }
+    .pix-loader.active { display: block; }
+    .pix-spinner {
+      width: 52px; height: 52px; margin: 0 auto 14px;
+      border: 4px solid rgba(47,78,181,.15);
+      border-top-color: #2f4eb5;
+      border-radius: 50%;
+      animation: spin .85s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .pix-loader-text { font-size: .9rem; color: #64748b; font-weight: 500; }
+
+    .pix-qr-img {
+      width: 180px; height: 180px; margin: 0 auto 14px;
+      border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.1);
+      display: block;
+    }
+    .pix-qr-title { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+    .pix-qr-subtitle { font-size: .82rem; color: #64748b; margin-bottom: 18px; }
+
+    .pix-code-box {
+      background: #f8fafc; border: 1.5px solid #e2e8f0;
+      border-radius: 10px; padding: 12px 14px;
+      font-size: .75rem; color: #94a3b8;
+      word-break: break-all; text-align: left;
+      margin-bottom: 12px; cursor: pointer;
+    }
+    .pix-btn-copy {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg,#2f4eb5,#1e3a8a);
+      color: white; border: none; border-radius: 10px;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: all .2s;
+    }
+    .pix-btn-copy:hover { opacity: .9; }
+    .pix-btn-copy.copied { background: #0f8400; }
+    .pix-copy-status { min-height: 18px; font-size: .78rem; color: #52b52f; font-weight: 600; margin-top: 8px; }
+
+    .pix-instructions {
+      background: #f0f9ff; border-radius: 10px;
+      padding: 14px 16px; margin-top: 16px;
+      text-align: left; display: none;
+    }
+    .pix-instructions.active { display: block; }
+    .pix-instructions h4 { font-size: .82rem; font-weight: 700; color: #0369a1; margin-bottom: 8px; }
+    .pix-instructions ol { padding-left: 18px; margin: 0; }
+    .pix-instructions li { font-size: .78rem; color: #334155; margin-bottom: 5px; }
+
+    .pix-error { text-align: center; padding: 20px 0; display: none; }
+    .pix-error.active { display: block; }
+    .pix-error p { color: #b91c1c; font-size: .9rem; }
+
+    .pix-confirmed { display: none; padding: 20px 0; text-align: center; }
+    .pix-confirmed.active { display: block; }
+    .pix-confirmed-icon { font-size: 3rem; color: #52b52f; }
+    .pix-confirmed h3 { color: #1e293b; font-weight: 700; margin: 10px 0 6px; }
+    .pix-confirmed p { font-size: .85rem; color: #64748b; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 575.98px) {
+      .contador-cotas { padding: 0.8rem 0.3rem; }
+      button.cota { width: 30%; padding: 0.5rem 0; }
+      .cota-qtd { font-size: 1.5rem; }
+      .cota h1  { font-size: .9rem; }
+      .cota h2  { font-size: .7rem; }
+      i.destaque { font-size: .7rem !important; }
+      button.btn-contador-cotas { height: 30px; width: 30px; font-size: 1.5rem; padding: 0.5rem 0; }
+      input.input-contador-cotas { width: 65% !important; margin: 0 0.5rem !important; }
+      button.adc-carrinho { font-size: 1.2rem; }
+      .card-hospital { flex-direction: column; }
+      .card-hospital-image, .card-hospital-text { width: 100%; }
+      .patterns-rodape { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="white-header">
+    <div class="logo">
+      <img src="images/logoviva.png" alt="Viva Sorte" class="logoviva">
+    </div>
+    <button class="menu-button" id="menuButton">☰</button>
+  </header>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <div class="container-banner">
+      <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="tag-compre-agora"><span>Site Oficial</span></div>
+            <img src="images/32313132323637323334.webp" class="d-block w-100" alt="Banner">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SORTEIO DATE -->
+  <div class="sorteio-date w-100 text-center">
+    <h1>Sorteio em
+      <span style="background-color:#f0ad4e;" id="contador">7 dias</span>
+      por apenas
+      <span style="background-color:#2f4eb5;color:white;padding:2px 6px;border-radius:4px;">R$0,99</span>
+    </h1>
+  </div>
+
+  <!-- COTAS -->
+  <div class="container-principal">
+    <div class="cotas">
+      <div class="cotas-one">
+        <button type="button" class="cota" onclick="selecionarValor(15)">
+          <div class="cota-qtd">+15</div><h1>R$14,85</h1><h2>SELECIONAR</h2>
+        </button>
+        <button type="button" class="cota" onclick="selecionarValor(30)">
+          <div class="cota-qtd">+30</div><h1>R$29,70</h1><h2>SELECIONAR</h2>
+        </button>
+        <button type="button" class="cota" onclick="selecionarValor(40)">
+          <div class="cota-qtd">+40</div><h1>R$39,60</h1><h2>SELECIONAR</h2>
+        </button>
+      </div>
+      <div class="cotas-one">
+        <button type="button" class="cota" onclick="selecionarValor(70)">
+          <i class="bi bi-star-fill destaque"></i>
+          <div class="cota-qtd">+70</div><h1>R$69,30</h1><h2>SELECIONAR</h2>
+        </button>
+        <button type="button" class="cota" onclick="selecionarValor(100)">
+          <div class="cota-qtd">+100</div><h1>R$99,00</h1><h2>SELECIONAR</h2>
+        </button>
+        <button type="button" class="cota" onclick="selecionarValor(200)">
+          <div class="cota-qtd">+200</div><h1>R$199,00</h1><h2>SELECIONAR</h2>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTADOR + COMPRAR -->
+  <div class="container-principal">
+    <div class="contador-cotas">
+      <span><button type="button" class="btn-contador-cotas" onclick="decrementar()">-</button></span>
+      <input type="number" id="numero" class="input-contador-cotas" value="0" min="0" oninput="highlightButton()">
+      <span><button type="button" class="btn-contador-cotas" onclick="incrementar()">+</button></span>
+    </div>
+
+    <button type="button" id="btn-adicionar-carrinho" class="adc-carrinho" onclick="abrirModalPix()" disabled>
+      <i class="bi bi-qr-code"></i> PAGAR COM PIX
+    </button>
+
+    <div class="sorteio-date w-100 text-center" style="margin-top:5px;">
+      <br>
+      <h1 style="font-size:.72rem;">Comprar mais títulos aumenta suas chances de ganhar!</h1>
+    </div>
+
+    <!-- CARDS -->
+    <div class="container-principal">
+      <div class="hospital">
+        <div class="card-hospital">
+          <div class="card-hospital-image">
+            <img src="images/logo-hospital.svg" alt="Hospital do Câncer">
+            <h2>Instituição beneficiada</h2>
+          </div>
+          <div class="card-hospital-text">
+            <p>O Hospital do Câncer de Londrina, fundado em 08 de novembro de 1965 por Lucilla Pinto Ballalai, foi originalmente chamado Centro Norte Paranaense de Pesquisas Médicas. Criado com o objetivo de melhorar o tratamento do câncer e a qualidade de vida, o hospital focava inicialmente na prevenção do câncer de colo de útero entre as mulheres de Londrina e região.</p>
+          </div>
+        </div>
+        <div class="card-hospital card-hospital-bg-azul">
+          <div class="card-hospital-image">
+            <img src="images/viva-hosp.svg" alt="Viva Privilégios">
+            <h2>Viva Privilégios</h2>
+          </div>
+          <div class="card-hospital-text">
+            <p>Viva Privilégios, um programa que enriquece sua vida com acesso à saúde, alimentação, transporte e mais. Com cada compra, acumule pontos para trocar por consultas médicas, receber cashback, e utilizar serviços de telefonia e apps de transporte e alimentação.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RODAPÉ -->
+  <div class="rodape">
+    <div class="container-principal">
+      <img class="logo-rodape" src="images/logoviva.png" alt="Logo">
+      <div class="redes">
+        <i class="bi bi-instagram"></i>
+        <i class="bi bi-facebook"></i>
+        <i class="bi bi-twitter"></i>
+        <i class="bi bi-youtube"></i>
+      </div>
+      <h1>Sorteios lastreados por Títulos de Capitalização, da Modalidade Incentivo, emitidos pela VIA Capitalização S.A, inscrita no CNPJ sob nº 88.076.302/0001-94, e aprovados pela SUSEP através do registro na SUSEP Sorteio n° 15414.652257/2023-51. O valor das premiações aqui indicados são líquidos, já descontado o devido imposto de renda de 25%. O registro deste plano na SUSEP não implica, por parte da Autarquia, incentivo ou recomendação a sua comercialização.</h1>
+      <div class="linha-rodape"></div>
+      <div class="patterns-rodape">
+        <div class="pattern-rodape">Títulos emitidos por:<img src="images/viacap.png" alt="Via Cap"></div>
+        <div class="pattern-rodape">Promoção realizada por:<img src="images/viva.png" alt="Viva"></div>
+        <div class="pattern-rodape">Desenvolvimento:<img src="images/edjdigital.png" alt="EDJ"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODAL PIX
+  ══════════════════════════════════════════════ -->
+  <div class="pix-modal-overlay" id="pixModalOverlay">
+    <div class="pix-modal-box">
+      <button class="pix-modal-close" onclick="fecharModalPix()">×</button>
+
+      <!-- TELA 1: FORMULÁRIO -->
+      <div class="pix-form-screen" id="pixFormScreen">
+        <div class="pix-modal-title">🎯 Finalizar compra via PIX</div>
+        <div class="pix-modal-subtitle">Preencha seus dados para gerar o QR Code</div>
+        <div class="pix-modal-valor" id="pixModalValor">R$ 0,00</div>
+
+        <div class="pix-form-group">
+          <label for="pixNome">Nome completo</label>
+          <input type="text" id="pixNome" placeholder="Ex: João Silva" autocomplete="name">
+        </div>
+        <div class="pix-form-group">
+          <label for="pixCpf">CPF (apenas números)</label>
+          <input type="text" id="pixCpf" placeholder="00000000000" maxlength="14" inputmode="numeric">
+        </div>
+        <div id="pixFormError" style="color:#b91c1c;font-size:.8rem;margin-bottom:8px;display:none;"></div>
+
+        <button class="pix-btn-gerar" id="pixBtnGerar" onclick="gerarPix()">
+          Gerar QR Code PIX
+        </button>
+      </div>
+
+      <!-- LOADER -->
+      <div class="pix-loader" id="pixLoader">
+        <div class="pix-spinner"></div>
+        <div class="pix-loader-text">Gerando seu QR Code PIX...</div>
+      </div>
+
+      <!-- TELA 2: QR CODE -->
+      <div class="pix-qr-screen" id="pixQrScreen">
+        <div class="pix-modal-valor" id="pixQrValor">R$ 0,00</div>
+        <img class="pix-qr-img" id="pixQrImg" src="" alt="QR Code PIX">
+        <div class="pix-qr-title">PIX gerado com sucesso! ✅</div>
+        <div class="pix-qr-subtitle">Copie o código abaixo ou escaneie o QR Code</div>
+        <div class="pix-code-box" id="pixCodeBox" onclick="copiarPix()">Aguardando código...</div>
+        <button class="pix-btn-copy" id="pixBtnCopy" onclick="copiarPix()">
+          <i class="bi bi-clipboard"></i> Copiar Código PIX
+        </button>
+        <div class="pix-copy-status" id="pixCopyStatus"></div>
+        <div class="pix-instructions" id="pixInstructions">
+          <h4>📱 Como pagar:</h4>
+          <ol>
+            <li>Abra o app do seu banco.</li>
+            <li>Escolha <strong>PIX → Copia e Cola</strong>.</li>
+            <li>Cole o código copiado e confirme o pagamento.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- ERRO -->
+      <div class="pix-error" id="pixError">
+        <p id="pixErrorMsg">Não foi possível gerar o PIX. Tente novamente.</p>
+        <button class="pix-btn-gerar" onclick="voltarFormulario()">Tentar novamente</button>
+      </div>
+
+      <!-- CONFIRMADO -->
+      <div class="pix-confirmed" id="pixConfirmed">
+        <div class="pix-confirmed-icon">✅</div>
+        <h3>Pagamento confirmado!</h3>
+        <p>Seus títulos foram reservados. Boa sorte!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  // ══════════════════════════════════════════════
+  //  CONFIGURAÇÃO
+  // ══════════════════════════════════════════════
+  var DUTTYFY_API_KEY  = '7d86a88976a54ae59fb62424ffc53d8b';
+  var DUTTYFY_BASE_URL = 'https://www.pagamentos-seguros.app/api-pix/OAmT514SQ-oQVwXwFYuczdSzpOEIWJq-m1BH9C3VXPeK54kpk5muVkR_TIpJtx9kG_TZAjPRgr3AajI8eA8f7Q';
+
+  // Mapa: quantidade → { preco (reais), precoCents }
+  var PRECOS = {
+    15:  { reais: 14.85,  cents: 1485  },
+    30:  { reais: 29.70,  cents: 2970  },
+    40:  { reais: 39.60,  cents: 3960  },
+    70:  { reais: 69.30,  cents: 6930  },
+    100: { reais: 99.00,  cents: 9900  },
+    200: { reais: 199.00, cents: 19900 }
+  };
+
+  var precoPorUnidade = 0.99;
+  var currentAmountCents = 0;
+  var currentPixCode     = '';
+  var pollTimer          = null;
+  var currentTxId        = '';
+
+  // ══════════════════════════════════════════════
+  //  CONTADOR / SELEÇÃO DE COTA
+  // ══════════════════════════════════════════════
+  var SEQUENCIA = [15, 30, 40, 70, 100, 200];
+
+  function incrementar() {
+    var input = document.getElementById('numero');
+    var v = parseInt(input.value) || 0;
+    var idx = SEQUENCIA.indexOf(v);
+    if (idx === -1) { input.value = SEQUENCIA[0]; }
+    else if (idx < SEQUENCIA.length - 1) { input.value = SEQUENCIA[idx + 1]; }
+    highlightButton();
+  }
+
+  function decrementar() {
+    var input = document.getElementById('numero');
+    var v = parseInt(input.value) || 0;
+    var idx = SEQUENCIA.indexOf(v);
+    if (idx > 0) { input.value = SEQUENCIA[idx - 1]; }
+    highlightButton();
+  }
+
+  function selecionarValor(valor) {
+    document.getElementById('numero').value = valor;
+    highlightButton();
+  }
+
+  function highlightButton() {
+    var input   = document.getElementById('numero');
+    var v       = parseInt(input.value) || 0;
+    var btn     = document.getElementById('btn-adicionar-carrinho');
+
+    document.querySelectorAll('.cota').forEach(function(b) {
+      var qtd = parseInt(b.querySelector('.cota-qtd').innerText.replace('+','').trim());
+      b.classList.toggle('cota-selected', qtd === v);
+    });
+
+    if (v > 0 && PRECOS[v]) {
+      currentAmountCents = PRECOS[v].cents;
+      btn.disabled = false;
+    } else {
+      currentAmountCents = 0;
+      btn.disabled = true;
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  //  MODAL
+  // ══════════════════════════════════════════════
+  function abrirModalPix() {
+    var v = parseInt(document.getElementById('numero').value) || 0;
+    if (!PRECOS[v]) return;
+
+    var preco = PRECOS[v];
+    document.getElementById('pixModalValor').textContent = 'R$ ' + preco.reais.toFixed(2).replace('.',',') + ' — ' + v + ' títulos';
+    document.getElementById('pixQrValor').textContent    = 'R$ ' + preco.reais.toFixed(2).replace('.',',');
+
+    mostrarFormulario();
+    document.getElementById('pixModalOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function fecharModalPix() {
+    document.getElementById('pixModalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    pararPolling();
+    currentPixCode = '';
+    currentTxId    = '';
+  }
+
+  document.getElementById('pixModalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) fecharModalPix();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') fecharModalPix();
+  });
+
+  function mostrarFormulario() {
+    document.getElementById('pixFormScreen').classList.remove('hidden');
+    document.getElementById('pixLoader').classList.remove('active');
+    document.getElementById('pixQrScreen').classList.remove('active');
+    document.getElementById('pixError').classList.remove('active');
+    document.getElementById('pixConfirmed').classList.remove('active');
+    document.getElementById('pixFormError').style.display = 'none';
+    document.getElementById('pixBtnGerar').disabled = false;
+  }
+
+  function voltarFormulario() {
+    mostrarFormulario();
+  }
+
+  function mostrarLoader() {
+    document.getElementById('pixFormScreen').classList.add('hidden');
+    document.getElementById('pixLoader').classList.add('active');
+    document.getElementById('pixQrScreen').classList.remove('active');
+    document.getElementById('pixError').classList.remove('active');
+  }
+
+  function mostrarQr(pixCode, qrImgUrl) {
+    document.getElementById('pixLoader').classList.remove('active');
+    document.getElementById('pixQrScreen').classList.add('active');
+    document.getElementById('pixCodeBox').textContent = pixCode;
+    document.getElementById('pixQrImg').src = qrImgUrl;
+    document.getElementById('pixBtnCopy').classList.remove('copied');
+    document.getElementById('pixBtnCopy').innerHTML = '<i class="bi bi-clipboard"></i> Copiar Código PIX';
+    document.getElementById('pixCopyStatus').textContent = '';
+    document.getElementById('pixInstructions').classList.remove('active');
+  }
+
+  function mostrarErro(msg) {
+    document.getElementById('pixLoader').classList.remove('active');
+    document.getElementById('pixQrScreen').classList.remove('active');
+    document.getElementById('pixError').classList.add('active');
+    document.getElementById('pixErrorMsg').textContent = msg || 'Não foi possível gerar o PIX. Tente novamente.';
+  }
+
+  // ══════════════════════════════════════════════
+  //  VALIDAÇÕES
+  // ══════════════════════════════════════════════
+  function limparCpf(cpf) { return cpf.replace(/\D/g,''); }
+
+  function validarCpf(cpf) {
+    cpf = limparCpf(cpf);
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+    var soma = 0, resto;
+    for (var i = 1; i <= 9; i++) soma += parseInt(cpf[i-1]) * (11 - i);
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf[9])) return false;
+    soma = 0;
+    for (var i = 1; i <= 10; i++) soma += parseInt(cpf[i-1]) * (12 - i);
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    return resto === parseInt(cpf[10]);
+  }
+
+  // Máscara CPF
+  document.getElementById('pixCpf').addEventListener('input', function() {
+    var v = this.value.replace(/\D/g,'').substring(0,11);
+    if (v.length > 9)      v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
+    else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
+    else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
+    this.value = v;
+  });
+
+  // ══════════════════════════════════════════════
+  //  GERAR PIX NA DUTTYFY
+  // ══════════════════════════════════════════════
+  async function gerarPix() {
+    var nome = document.getElementById('pixNome').value.trim();
+    var cpf  = limparCpf(document.getElementById('pixCpf').value);
+    var errEl = document.getElementById('pixFormError');
+
+    if (!nome || nome.length < 3) {
+      errEl.textContent = 'Por favor, informe seu nome completo.';
+      errEl.style.display = 'block'; return;
+    }
+    if (!validarCpf(cpf)) {
+      errEl.textContent = 'CPF inválido. Verifique e tente novamente.';
+      errEl.style.display = 'block'; return;
+    }
+    errEl.style.display = 'none';
+
+    var v = parseInt(document.getElementById('numero').value) || 0;
+    var preco = PRECOS[v];
+    if (!preco) return;
+
+    document.getElementById('pixBtnGerar').disabled = true;
+    mostrarLoader();
+
+    var payload = {
+      amount:      preco.cents,
+      description: v + ' títulos Viva Sorte',
+      customer: {
+        name:     nome,
+        document: cpf,
+        email:    cpf + '@vivasorte.com',
+        phone:    '11999999999'
+      },
+      item: {
+        title:    v + ' Títulos Viva Sorte',
+        price:    preco.cents,
+        quantity: 1
+      },
+      paymentMethod: 'PIX',
+      utm: window.location.search.replace('?','')
+    };
+
+    try {
+      var resp = await fetch(DUTTYFY_BASE_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body:    JSON.stringify(payload)
+      });
+
+      var data = {};
+      try { data = await resp.json(); } catch(e) { throw new Error('Resposta inválida da gateway.'); }
+
+      if (!resp.ok) throw new Error(data.message || data.error || 'Erro ao gerar PIX.');
+
+      var txId    = data.transactionId || data.id || data.transaction_id || '';
+      var pixCode = data.pixCode || data.pix_code || data.qrcode || '';
+
+      if (!pixCode) throw new Error('Código PIX não retornado pela gateway.');
+
+      var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(pixCode);
+
+      currentPixCode = pixCode;
+      currentTxId    = txId;
+
+      mostrarQr(pixCode, qrUrl);
+      iniciarPolling(txId);
+
+    } catch(err) {
+      mostrarErro(err.message || 'Não foi possível gerar o PIX. Tente novamente.');
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  //  COPIAR PIX
+  // ══════════════════════════════════════════════
+  async function copiarPix() {
+    if (!currentPixCode) return;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(currentPixCode);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = currentPixCode;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta);
+      }
+      var btn = document.getElementById('pixBtnCopy');
+      btn.classList.add('copied');
+      btn.innerHTML = '<i class="bi bi-check-lg"></i> Copiado!';
+      document.getElementById('pixCopyStatus').textContent = '✅ Código copiado! Cole no app do banco.';
+      document.getElementById('pixInstructions').classList.add('active');
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar Código PIX';
+      }, 3000);
+    } catch(e) {
+      document.getElementById('pixCopyStatus').textContent = 'Não foi possível copiar. Copie manualmente.';
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  //  POLLING DE STATUS
+  // ══════════════════════════════════════════════
+  function iniciarPolling(txId) {
+    pararPolling();
+    if (!txId) return;
+    pollTimer = setInterval(function() { verificarStatus(txId); }, 5000);
+  }
+
+  function pararPolling() {
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  }
+
+  async function verificarStatus(txId) {
+    try {
+      var url  = 'https://app.duttyfy.com.br/api-pix/' + DUTTYFY_API_KEY + '/' + txId + '/status';
+      var resp = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } });
+      if (!resp.ok) return;
+      var data = await resp.json();
+      var status = String((data && (data.status || data.Status)) || '').toLowerCase();
+      if (status === 'paid' || status === 'approved' || status === 'completed') {
+        pararPolling();
+        document.getElementById('pixLoader').classList.remove('active');
+        document.getElementById('pixQrScreen').classList.remove('active');
+        document.getElementById('pixConfirmed').classList.add('active');
+      }
+    } catch(e) { /* silencioso */ }
+  }
+
+  // ══════════════════════════════════════════════
+  //  CONTADOR DE DIAS
+  // ══════════════════════════════════════════════
+  function atualizarContador() {
+    var span = document.getElementById('contador');
+    var hoje = new Date();
+    var diasRestantes = 7 - hoje.getDay();
+    if (diasRestantes === 0) diasRestantes = 7;
+    span.textContent = diasRestantes === 1 ? '1 dia' : diasRestantes + ' dias';
+  }
+  atualizarContador();
+  setInterval(atualizarContador, 24 * 60 * 60 * 1000);
+
+  // ══════════════════════════════════════════════
+  //  INIT
+  // ══════════════════════════════════════════════
+  document.addEventListener('DOMContentLoaded', function() {
+    selecionarValor(30);
+  });
+  </script>
+
+  <!-- UTMify Pixel 2 -->
+  <script>
+    window.pixelId = "67b97607e690b02ba5a399e4";
+    var b = document.createElement("script");
+    b.setAttribute("async",""); b.setAttribute("defer","");
+    b.setAttribute("src","https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+    document.head.appendChild(b);
+  </script>
+
+</body>
+</html>
